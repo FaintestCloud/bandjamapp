@@ -22,3 +22,21 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local env / secrets
+.env
+.env.local
+.env.*.local
+*.serviceAccount*.json
+serviceAccountKey.json
+firebase-adminsdk-*.json
+
+# Optional caches / coverage
+coverage/
+.cache/
+
+# Optional framework builds (uncomment if applicable)
+# .next/
+# .vercel/
+# .parcel-cache/
+# .vite/

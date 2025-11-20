@@ -3,6 +3,46 @@ import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth'
 import { auth, provider } from './firebaseConfig'
 import Home from './pages/Home'
 
+function App() {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+  }, []);
+
+const handleLogin = async () => signInWithPopup(auth, provider);
+const handleLogout = async () => signOut(auth);
+
+return (
+  <div className="p-4 max-w-md mx-auto" >
+    {!user ? (
+      <>
+        <button
+        onClick={handleLogin} 
+        className="w-full bg-blue-500 text-white py-2 rounded-lg" 
+        >
+          It's time to Jam woohhoooo! (Login with Google)
+        </button>
+      </>
+    ) : (
+      <>
+        <div className="flex justify-between items-center mb-4">
+          <p className="text-lg">Welcome, {user.displayName}</p>
+          <button onClick={handleLogout} className="text-red-500">
+            Logout
+          </button>
+        </div>
+        <Home user={user} />
+      </>
+    )}
+  </div>
+);
+}
+
+export default App;
+
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 // import './App.css'
@@ -35,41 +75,3 @@ import Home from './pages/Home'
 //     </>
 //   )
 // }
-
-function App() {
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-  }, []);
-
-const handleLogin = async () => signInWithPopup(auth, provider);
-const handleLogout = async () => signOut(auth);
-
-return (
-  <div className="p-4 max-w-md mx-auto" >
-    {!user ? (
-      <button
-       onClick={handleLogin} 
-       className="w-full bg-blue-500 text-white py-2 rounded-lg" 
-       >
-        Sign in with Google
-      </button>
-    ) : (
-      <>
-        <div className="flex justify-between items-center mb-4">
-          <p className="text-lg">Welcome, {user.displayName}</p>
-          <button onClick={handleLogout} className="text-red-500">
-            Logout
-          </button>
-        </div>
-        <Home user={user} />
-      </>
-    )}
-  </div>
-);
-}
-
-export default App;
