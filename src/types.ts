@@ -5,6 +5,7 @@ export interface Song {
   title: string;
   key?: string;
   originalKey?: string;
+  lyrics?: string;
   instruments?: Record<string, Instrument>;
   comments?: CommentItem[];
 }
@@ -19,4 +20,10 @@ export interface Instrument {
   name?: string;
   part?: string;
   [key: string]: any;
+}
+
+export interface JamSession {
+  id?: string;
+  date: Timestamp | number | string;
+  songID : string[];
 }

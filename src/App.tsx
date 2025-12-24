@@ -4,7 +4,8 @@ import { AuthProvider, useAuth } from "./auth/AuthContext";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
-import SplashScreen from "./components/LoadingSplashScreen"
+import SplashScreen from "./components/LoadingSplashScreen";
+import SongDetail from "./pages/SongDetail";
 
 function AppContent() {
   const { loading } = useAuth();
@@ -22,6 +23,16 @@ function AppContent() {
         element={
           <ProtectedRoute>
             <Home />
+          </ProtectedRoute>
+        }
+      />
+
+      {/*  Song Detail */}
+      <Route
+        path="/songs/:id"
+        element={
+          <ProtectedRoute>
+            <SongDetail />
           </ProtectedRoute>
         }
       />
