@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SplashScreen from "./components/LoadingSplashScreen";
 import SongDetail from "./pages/SongDetail";
@@ -22,20 +23,13 @@ function AppContent() {
         path="/"
         element={
           <ProtectedRoute>
-            <Home />
+            <AppLayout />
           </ProtectedRoute>
         }
-      />
-
-      {/*  Song Detail */}
-      <Route
-        path="/songs/:id"
-        element={
-          <ProtectedRoute>
-            <SongDetail />
-          </ProtectedRoute>
-        }
-      />
+      >
+        <Route path="/" element={<Home />} />
+        <Route path="/songs/:id" element={<SongDetail />} />
+      </Route>
 
       {/* New Route Example */}
       {/* <Route
