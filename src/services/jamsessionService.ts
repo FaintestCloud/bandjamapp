@@ -15,7 +15,7 @@ const sessionCol = collection(db, "sessions");
 export async function addJamSession(data : JamSession) {
     return addDoc(sessionCol, {
     date: Timestamp.fromDate(data.date),
-    songIDs: data.songIDs,
+    songIds: data.songIds,
     createdAt: serverTimestamp(),
     });
 }
@@ -23,7 +23,7 @@ export async function addJamSession(data : JamSession) {
 export async function updateJamSession(id: string, data: Partial<JamSession>) {
     const ref = doc(db, "sessions", id);
     const updateData: any = {
-    ...(data.songIDs && { songIDs: data.songIDs }),
+    ...(data.songIds && { songIds: data.songIds }),
     ...(data.date && { date: Timestamp.fromDate(data.date) }),
     updatedAt: serverTimestamp(),
     };

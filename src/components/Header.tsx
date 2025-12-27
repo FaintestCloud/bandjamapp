@@ -8,7 +8,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-black/80 backdrop-blur-md shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="mx-auto px-6 py-4 flex items-center justify-between">
 
         {/* Logo / Brand */}
         <Link
@@ -19,7 +19,7 @@ export default function Header() {
         </Link>
 
         {/* Navigation */}
-        <nav className="hidden md:flex space-x-8 text-sm font-medium">
+        <nav className="hidden md:flex space-x-8 md:space-x-12 lg:space-x-16 text-sm font-medium">
           <Link
             to="/"
             className="text-gray-300 hover:text-indigo-400 transition-colors"
@@ -27,7 +27,7 @@ export default function Header() {
             Home
           </Link>
           <Link
-            to="/session"
+            to="/jamsessionlist"
             className="text-gray-300 hover:text-indigo-400 transition-colors"
           >
             Session

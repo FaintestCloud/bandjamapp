@@ -25,5 +25,5 @@ export interface Instrument {
 export interface JamSession {
   id?: string;
   date: Date;
-  songIDs : string[];
+  songIds : string[];
 }

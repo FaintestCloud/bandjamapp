@@ -23,7 +23,7 @@ export default function useJamSession(sessionId: string | undefined) {
           setJamSession(
             { id: docSnap.id,
               date: (data.date).toDate(),
-              songIDs: data.songIDs,
+              songIds: Array.isArray(data.songIds) ? data.songIds : [],
             });
         } else {
           setJamSession(null);

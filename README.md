@@ -87,3 +87,8 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 ## License
 
 MIT
+
+
+TO DO:
+- Hooks : clean all the data and normalize them : handle empty data
+- Add 404 not found page

@@ -7,7 +7,8 @@ import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SplashScreen from "./components/LoadingSplashScreen";
 import SongDetail from "./pages/SongDetail";
-import JamSession from "./pages/JamSession";
+import JamSession from "./pages/JamSessionDetail";
+import JamSessionList from "./pages/JamSessionList";
 
 function AppContent() {
   const { loading } = useAuth();
@@ -31,6 +32,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/songs/:id" element={<SongDetail />} />
         <Route path="/jamsession/:id" element={<JamSession />} />
+        <Route path="/jamsessionlist" element={<JamSessionList />} />
       </Route>
 
       {/* New Route Example */}

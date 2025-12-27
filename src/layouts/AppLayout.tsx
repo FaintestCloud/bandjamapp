@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-t from-gray-700 to-gray-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-t from-gray-700 to-gray-200">
       <Header />
       <main className="flex-1">
         <Outlet />
