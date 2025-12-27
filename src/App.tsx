@@ -7,6 +7,7 @@ import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SplashScreen from "./components/LoadingSplashScreen";
 import SongDetail from "./pages/SongDetail";
+import JamSession from "./pages/JamSession";
 
 function AppContent() {
   const { loading } = useAuth();
@@ -29,6 +30,7 @@ function AppContent() {
       >
         <Route path="/" element={<Home />} />
         <Route path="/songs/:id" element={<SongDetail />} />
+        <Route path="/jamsession/:id" element={<JamSession />} />
       </Route>
 
       {/* New Route Example */}

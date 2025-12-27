@@ -1,69 +1,89 @@
-# React + TypeScript + Vite
+# Band Jam App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A collaborative web application for musicians to share, manage, and comment on song ideas and jam sessions. Built with React, Firebase, and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Google authentication (Firebase Auth)
+- Add, view, and delete songs
+- Store song title, key, and comments
+- Jam session management (view individual sessions)
+- Protected routes for authenticated users
+- Animated loading splash screen
+- Modular React hooks and components
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React + TypeScript
+- Firebase (Auth & Firestore)
+- Vite
+- Tailwind CSS
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### Prerequisites
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js (v18+ recommended)
+- Firebase project ([Get started here](https://console.firebase.google.com/))
+
+### Installation
+
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/your-username/bandjamapp.git
+   cd bandjamapp/band-jam-app
+   ```
+
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+
+3. **Configure Firebase:**
+   - Create a `.env.local` file in the project root:
+     ```
+     VITE_FIREBASE_API_KEY=your-api-key
+     VITE_FIREBASE_AUTH_DOMAIN=your-auth-domain
+     VITE_FIREBASE_PROJECT_ID=your-project-id
+     VITE_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+     VITE_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+     VITE_FIREBASE_APP_ID=your-app-id
+     ```
+   - Replace the values with your Firebase project credentials.
+
+4. **Start the development server:**
+   ```sh
+   npm run dev
+   ```
+
+### Usage
+
+- Visit `/login` to sign in with Google.
+- Add new songs with title, key, and comments.
+- View, delete, and comment on songs.
+- View individual jam sessions at `/jamsession/:id`.
+- Only authenticated users can access the main app.
+
+## Project Structure
+
+```
+src/
+  components/      # UI components (SongList, SongItem, etc.)
+  hooks/           # Custom React hooks (useSongs, useJamSession, etc.)
+  pages/           # Route pages (Home, Login, SongDetail, JamSession)
+  auth/            # Auth context
+  services/        # Firestore service functions
+  firebaseConfig.ts
+  types.ts         # TypeScript types
+public/
+  index.html
+.env.local         # Firebase credentials (not committed)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Contributing
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## License
+
+MIT
