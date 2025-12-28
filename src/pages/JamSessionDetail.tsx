@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useJamSession from "../hooks/useJamSession.ts";
+import useSongs from "../hooks/useSongs.ts";
+import SplashScreen from "../components/LoadingSplashScreen";
+import SongItem from "../components/SongItem";
 
 export default function JamSession() {
     const { id } = useParams<{ id: string }>();
-    const { jamSession, loading, error } = useJamSession(id!);
+    const { jamSession, loading : sessionLoading, error : sessionErr } = useJamSession(id!);
+    const { songs, loading : songsLoading } = useSongs(jamSession?.songIds);
 
-    if (loading) return <div className="p-4">Loading...</div>;
-    if (error) return <div className="p-4">Error loading session</div>;
+    if (sessionLoading ||songsLoading ) return <SplashScreen />;
+    if (sessionErr) return <div className="p-4">Error loading session</div>;
     if (!jamSession) return <div className="p-4">Session not found</div>;
-    console.log(jamSession.date);
+
     return (
     <div className="p-4">
         <div className="font-medium text-black mb-2">
@@ -17,13 +20,13 @@ export default function JamSession() {
             {jamSession.date.toLocaleString()}
         </div>
         <div className="text-gray-600 mb-4">
-        Songs in this session: {jamSession.songIds.length}
+        {jamSession.songIds.length} songs
         </div>
 
-        <ul className="list-disc pl-5 space-y-1">
-        {jamSession.songIds.map((songId) => (
-            <li key={songId}>{songId}</li>
-        ))}
+        <ul>
+            {songs.map((song) => (
+                <SongItem key={song.id} song={song} />
+            ))}
         </ul>
     </div>
     );

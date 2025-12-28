@@ -30,7 +30,7 @@ function AppContent() {
         }
       >
         <Route path="/" element={<Home />} />
-        <Route path="/songs/:id" element={<SongDetail />} />
+        <Route path="/song/:id" element={<SongDetail />} />
         <Route path="/jamsession/:id" element={<JamSession />} />
         <Route path="/jamsessionlist" element={<JamSessionList />} />
       </Route>

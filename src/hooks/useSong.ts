@@ -3,13 +3,13 @@ import { db } from "../firebaseConfig";
 import { doc, onSnapshot } from "firebase/firestore";
 import type { Song } from "../types.ts";
 
-export default function useSongs(songId: string | undefined) {
-  const [songs, setSongs] = useState<Song | null>(null);
+export default function useSong(songId: string | undefined) {
+  const [song, setSong] = useState<Song | null>(null);
 
   useEffect(() => {
     // Handle non-exist id
     if (!songId) {
-      setSongs(null);
+      setSong(null);
       return;
     }
 
@@ -18,17 +18,17 @@ export default function useSongs(songId: string | undefined) {
       (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-        setSongs(
+        setSong(
           { id : docSnap.id,
             ...data,
           } as Song);
         } else {
-          setSongs(null);
+          setSong(null);
         }
     });
 
     return unsub;
   }, []);
 
-  return { songs };
+  return { song };
 }

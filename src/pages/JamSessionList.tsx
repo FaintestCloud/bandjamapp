@@ -31,7 +31,7 @@ export default function JamSessions() {
               to={`/jamsession/${session.id}`}
               className="block p-3 border rounded hover:bg-gray-50"
             >
-              <div className="font-medium">
+              <div className="font-medium text-gray-800 mb-1">
                 Session Date:{" "}
                 {session.date.toLocaleString()}
               </div>
@@ -39,6 +39,13 @@ export default function JamSessions() {
               <div className="text-sm text-gray-500">
                 {session.songIds.length} songs
               </div>
+
+              {session.songIds.map((song => (
+                <div key={song} className="text-sm text-gray-400">
+                  Song ID: {song}
+                </div>
+              )))}
+
             </Link>
           </li>
         ))}

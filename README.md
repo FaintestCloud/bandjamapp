@@ -92,3 +92,4 @@ MIT
 TO DO:
 - Hooks : clean all the data and normalize them : handle empty data
 - Add 404 not found page
+- Back link for song detail page

@@ -31,7 +31,7 @@ export default function SongDetail() {
 
   return (
     <div className="max-w-xl mx-auto p-4">
-      <Link to="/" className="text-blue-600 hover:underline">&larr; Back to Songs</Link>
+      {/* TODO:<Link to="/" className="text-blue-600 hover:underline">&larr; Back to Songs</Link> */}
       <h1 className="text-2xl font-bold mt-4 mb-2">{song.title}</h1>
       <div className="mb-2 text-gray-700">Key: <span className="font-mono">{song.key}</span></div>
       {song.comments && song.comments.length > 0 && (
