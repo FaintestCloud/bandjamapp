@@ -42,6 +42,11 @@ export default function SongItem({ song }: Props) {
         style={{ maxHeight }}
         className="overflow-hidden transition-all duration-300 px-4 text-gray-600 text-sm"
       >
+        {song.originalKey && (
+          <p>
+            <span className="font-semibold">Original Key:</span> {song.key}
+          </p>
+        )}
         {song.key && (
           <p>
             <span className="font-semibold">Key:</span> {song.key}
