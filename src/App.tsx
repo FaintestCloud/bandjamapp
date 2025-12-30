@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import Home from "./pages/Home";
+import NotFound from "./pages/404NotFound";
 import Login from "./pages/Login";
 import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -46,7 +47,7 @@ function AppContent() {
       /> */}
 
       {/* Catch-all / 404 Route */}
-      {/* <Route path="*" element={<NotFound />} /> */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
