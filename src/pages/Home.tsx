@@ -5,11 +5,13 @@ import { mockSongs } from "../mocks/songs.mock";
 import SongItem from "../components/SongItem";
 import AddSongForm from "../components/AddSongForm";
 
+// Mock Data
+const nextSession = mockJamSessions[0];
+const songs = mockSongs.filter(song =>
+nextSession.songIds.includes(song.id!)
+);
+
 export default function Home() {
-    const nextSession = mockJamSessions[0];
-    const songs = mockSongs.filter(song =>
-    nextSession.songIds.includes(song.id!)
-    );
     const [showForm, setShowForm] = useState(false);
 
     return (

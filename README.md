@@ -91,7 +91,6 @@ MIT
 
 TO DO:
 - Hooks : clean all the data and normalize them : handle empty data
-- Add 404 not found page
 - Back link for song detail page
 - Handle error message (e.g. 'throw error' in updateJamSession)
 - Handledelete of SongItem (when collapse, button disappear without animation ; consider swiping for mobile user)

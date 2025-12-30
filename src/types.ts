@@ -6,7 +6,8 @@ export interface Song {
   key?: string;
   originalKey?: string;
   lyrics?: string;
-  instruments?: Record<string, Instrument>;
+  instruments?: Record<string, string>;
+  referenceLink? : string;
   comments?: CommentItem[];
 }
 
@@ -14,12 +15,6 @@ export interface CommentItem {
   author?: string;
   text: string;
   createdAt?: Timestamp | number | string;
-}
-
-export interface Instrument {
-  name?: string;
-  part?: string;
-  [key: string]: any;
 }
 
 export interface JamSession {

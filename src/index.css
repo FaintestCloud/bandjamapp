@@ -57,15 +57,41 @@ button:focus-visible {
 }
 
 /* Timer */
-.countdown-number {
-  @apply text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans tracking-wide;
+@layer components {
+  .countdown-number {
+    @apply text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans tracking-wide;
+  }
+  .countdown-seconds {
+    @apply text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-sans tracking-wide;
+  }
+  .countdown-label {
+    @apply text-[10px] sm:text-xs uppercase tracking-wider mt-1;
+  }
 }
-.countdown-seconds {
-  @apply text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-sans tracking-wide;
+
+/* Song Item */
+@layer components {
+  .songitem-header{
+    @apply font-semibold text-gray-800 text-base;
+  }
+
+  .songitem-text {
+    @apply text-sm text-gray-600 leading-snug;
+  }
+
+  .songitem-label {
+    @apply font-semibold text-gray-700;
+  }
+
+  .songitem-players {
+    @apply ml-4 text-gray-700 leading-tight list-inside text-sm
+  }
+
+  .songitem-link {
+    @apply truncate text-gray-600 hover:underline hover:text-gray-900;
+  }
 }
-.countdown-label {
-  @apply text-[10px] sm:text-xs uppercase tracking-wider mt-1;
-}
+
 
 @media (prefers-color-scheme: light) {
   :root {
