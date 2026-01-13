@@ -8,6 +8,7 @@ import AppLayout from "./layouts/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SplashScreen from "./components/LoadingSplashScreen";
 import SongDetail from "./pages/SongDetail";
+import SongList from "./pages/SongList";
 import JamSession from "./pages/JamSessionDetail";
 import JamSessionList from "./pages/JamSessionList";
 
@@ -32,6 +33,7 @@ function AppContent() {
       >
         <Route path="/" element={<Home />} />
         <Route path="/song/:id" element={<SongDetail />} />
+        <Route path="/songlist" element={<SongList />} />
         <Route path="/jamsession/:id" element={<JamSession />} />
         <Route path="/jamsessionlist" element={<JamSessionList />} />
       </Route>

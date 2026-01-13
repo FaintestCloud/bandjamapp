@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
+import SplashScreen from "../components/LoadingSplashScreen";
 import useJamSession from "../hooks/useJamSession.ts";
 import useSongs from "../hooks/useSongs.ts";
-import SplashScreen from "../components/LoadingSplashScreen";
 import SongItem from "../components/SongItem";
 
 export default function JamSession() {

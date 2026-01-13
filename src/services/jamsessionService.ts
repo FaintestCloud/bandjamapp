@@ -2,6 +2,7 @@ import { db } from "../firebaseConfig.ts";
 import {
   query,
   where,
+  getDoc,
   getDocs,
   addDoc,
   updateDoc,
@@ -16,6 +17,7 @@ import {
 import type { JamSession } from "../types";
 
 const sessionCol = collection(db, "sessions");
+const nextSessionDoc = doc(db, "meta", "nextSession")
 
 export async function addJamSession(data : JamSession) {
     const exists = await sessionExistsForDate(data.date);
@@ -70,6 +72,21 @@ export async function updateJamSession(
 export async function deleteJamSession(id: string) {
     const ref = doc(db, "sessions", id);
     return deleteDoc(ref);
+}
+
+export async function getNextSession() : Promise<string | null> {
+    const nextSessionSnap = await getDoc(nextSessionDoc);
+    if (!nextSessionSnap.exists()) return null;
+
+    const sessionId = nextSessionSnap.data().sessionId;
+    if (!sessionId) return null;
+
+    return sessionId;
+}
+
+export async function setNextSession(id: string) {
+    const updateData = {sessionId : id};
+    return updateDoc(nextSessionDoc, updateData);
 }
 
 // Internal function

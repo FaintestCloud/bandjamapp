@@ -33,7 +33,7 @@ export default function Header() {
             Session
           </Link>
           <Link
-            to="/songs"
+            to="/songlist"
             className="text-gray-300 hover:text-indigo-400 transition-colors"
           >
             Songs
