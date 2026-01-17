@@ -1,8 +1,9 @@
 import { Timestamp } from "firebase/firestore";
 
 export interface Song {
-  id?: string;
+  id? : string;
   title: string;
+  artist?: string;
   key?: string;
   originalKey?: string;
   lyrics?: string;
