@@ -11,6 +11,7 @@ export default function SongItem({ song }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [maxHeight, setMaxHeight] = useState("0px");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Update maxHeight when isOpen changes
   useEffect(() => {
@@ -90,12 +91,44 @@ export default function SongItem({ song }: Props) {
             More
           </Link>
 
-          <button
-            onClick={() => song.id && deleteSong(song.id)}
-            className="my-1 px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-600 transition-colors"
-          >
-            Delete
-          </button>
+        <button
+          onClick={() => setShowDeleteConfirm(true)}
+          className="my-1 px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-600 transition-colors"
+        >
+          Delete
+        </button>
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-80 shadow-xl">
+              <h2 className="text-lg font-semibold mb-2">
+                Confirm Deletion
+              </h2>
+
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to delete this song?
+              </p>
+
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={() => {
+                    if (song.id) deleteSong(song.id);
+                    setShowDeleteConfirm(false);
+                  }}
+                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         </div>
       </div>
     </li>
