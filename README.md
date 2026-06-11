@@ -96,3 +96,4 @@ TO DO:
 - Handle delete/more ui of SongItem (when collapse, button disappear without animation ; consider swiping for mobile user)
 - refine 'no upcoming jam session' on homepage
 - add deletion confirm
+- handle adblock scenario where login page couldn't be loaded

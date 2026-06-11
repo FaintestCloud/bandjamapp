@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
+import { ChordProParser, HtmlTableFormatter } from 'chordsheetjs';
+
 import { db } from "../firebaseConfig";
 import { updateSong } from "../services/songService"
 import type { Song } from "../types";
@@ -12,6 +14,8 @@ const MUSICAL_KEYS = [
   "F", "F#", "G", "G#", "A",
   "A#", "B", "-"
 ];
+const chordProParser = new ChordProParser;
+const htmlTableFormatter = new HtmlTableFormatter;
 
 export default function SongDetail() {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +25,7 @@ export default function SongDetail() {
 
   const [originalKey, setOriginalKey] = useState<string>("-");
   const [currentKey, setCurrentKey] = useState<string>("-");
+  let songChordParsed = null;
 
   useEffect(() => {
     if (!id) return;
@@ -54,21 +59,32 @@ export default function SongDetail() {
     if(!song) return;
     if (!song.id) return;
     if (!currentKey) return;
+    if (song.key === currentKey) return;
 
     updateSong(song.id, { key: currentKey }).catch(console.error);
+    song.key = currentKey;
   }, [currentKey]);
 
   useEffect(() => {
     if(!song) return;
     if (!song.id) return;
     if (!originalKey) return;
+    if (song.originalKey === originalKey) return;
 
     updateSong(song.id, { originalKey: originalKey }).catch(console.error);
+    song.originalKey = originalKey;
   }, [originalKey]);
 
   if (loading) return <div className="p-8 text-center">Loading...</div>;
   if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
   if (!song) return null;
+
+  if (song.lyrics) {
+    const rawParsed = chordProParser.parse(song.lyrics).setKey(originalKey).changeKey(currentKey);
+    songChordParsed = htmlTableFormatter.format(rawParsed);
+  } else {
+    songChordParsed = null;
+  }
 
   return (
     <div className="max-w-dvw mx-auto pt-4 pl-6">
@@ -110,6 +126,7 @@ export default function SongDetail() {
         </label>
       </div>
 
+      {/* Instruments & Players */}
       {song.instruments && Object.keys(song.instruments).length > 0 && (
         <div>
           <span className="songitem-label">Players:</span>
@@ -124,6 +141,7 @@ export default function SongDetail() {
         </div>
       )}
 
+      {/* Reference Link */}
       {song.referenceLink && (
         <p className="flex gap-1">
           <span className="shrink-0">Reference:</span>
@@ -139,7 +157,15 @@ export default function SongDetail() {
         </p>
       )}
 
+      {/* Song Lyrics and Chords */}
+      {songChordParsed && (
+        <div
+        className=""
+        dangerouslySetInnerHTML={{__html: songChordParsed }}
+        />
+      )}
 
+      {/* Comments */}
       {song.comments && song.comments.length > 0 && (
         <div className="mt-4">
           <h2 className="font-semibold mb-2">Comments:</h2>
