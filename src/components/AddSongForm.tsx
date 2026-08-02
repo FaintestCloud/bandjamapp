@@ -20,7 +20,7 @@ export default function AddSongForm({jamSessionId}: AddSongFormProps) {
     setError(null);
 
     try{
-      const newSongRef = await addSong({ title, key });
+      const newSongRef = await addSong(title, key);
       if (jamSessionId) {
         await updateJamSession(jamSessionId, {
           addSongId : newSongRef.id,

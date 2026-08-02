@@ -11,9 +11,10 @@ import type { Song } from "../types";
 
 const songsCol = collection(db, "songs");
 
-export async function addSong(data : Song) {
+export async function addSong(title : string, key? : string) {
     return addDoc(songsCol, {
-        ...data,
+        title,
+        ...(key ? { key } : {}),
         createdAt : serverTimestamp(),
     });
 }

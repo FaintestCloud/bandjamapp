@@ -5,6 +5,7 @@ import { ChordProParser, HtmlTableFormatter } from 'chordsheetjs';
 
 import { db } from "../firebaseConfig";
 import { updateSong } from "../services/songService"
+import SongInstrumentEditor from "../components/SongInstrumentEditor.tsx";
 import type { Song } from "../types";
 import { mockSongs } from "../mocks/songs.mock";
 
@@ -22,10 +23,12 @@ export default function SongDetail() {
   const [song, setSong] = useState<Song | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showInstrumentEditor, setShowInstrumentEditor] = useState(false);
 
   const [originalKey, setOriginalKey] = useState<string>("-");
   const [currentKey, setCurrentKey] = useState<string>("-");
   let songChordParsed = null;
+  const instruments = song?.instruments ?? {};
 
   useEffect(() => {
     if (!id) return;
@@ -43,9 +46,10 @@ export default function SongDetail() {
       getDoc(doc(db, "songs", id))
         .then((snap) => {
           if (snap.exists()) {
-            setSong({ id: snap.id, ...(snap.data() as Song) });
+            setSong({...(snap.data() as Song), id: snap.id });
             setCurrentKey(snap.data().key ?? "-");
             setOriginalKey(snap.data().originalKey ?? "-");
+            // setEditableInstruments({ ...snap.data().instruments });
           } else {
             setError("Song not found.");
           }
@@ -127,19 +131,45 @@ export default function SongDetail() {
       </div>
 
       {/* Instruments & Players */}
-      {song.instruments && Object.keys(song.instruments).length > 0 && (
-        <div>
-          <span className="songitem-label">Players:</span>
-          <ul className="songitem-players">
-            {Object.entries(song.instruments).map(([instrument, player]) => (
-              <li key={instrument}>
-                <span className="font-medium">{instrument.replace(/([A-Z])/g, " $1")}</span> : {player}
-              </li>
-            ))}
-          </ul>
-          <button>Add one more</button>
+      {/* TODO:Think of better way to start editing instrument */}
+      <div>
+        <div className="flex items-center gap-3">
+          <span className="songitem-label">Players</span>
         </div>
-      )}
+      </div>
+      <ul className="songitem-players">
+        {Object.entries(instruments).map(([instrument, player]) => (
+          <li key={instrument}>
+            <span className="font-medium">
+              {instrument.replace(/([A-Z])/g, " $1")}
+            </span>
+            {" : "}
+            {player}
+          </li>
+        ))}
+      </ul> 
+      <button
+        onClick={() => setShowInstrumentEditor(true)}
+        className="text-sm text-blue-500"
+      >
+        Edit
+      </button>
+      {
+        showInstrumentEditor && (
+          <SongInstrumentEditor
+            instruments={instruments}
+            songId={song.id}
+            onClose={() => setShowInstrumentEditor(false)}
+            onConfirm={(updatedInstruments) => {
+              setSong(prev => prev ? {
+                  ...prev,
+                  instruments: updatedInstruments,
+              } : null);
+              setShowInstrumentEditor(false);
+            }}
+          />
+        )
+      }
 
       {/* Reference Link */}
       {song.referenceLink && (

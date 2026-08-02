@@ -11,7 +11,6 @@ export default function Songs() {
     const unsub = onSnapshot(collection(db, "songs"), (snap) => {
       setSongs(
         snap.docs.map((doc) => ({
-          id: doc.id,
           ...(doc.data() as Song)
         })) as Song[]
       );

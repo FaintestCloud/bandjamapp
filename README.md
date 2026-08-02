@@ -94,3 +94,6 @@ Func
 - add deletion confirm
 - handle adblock scenario where login page couldn't be loaded
 - handle anonymous login ; add passcode
+
+- Instruments
+   - Beautify components and edit button

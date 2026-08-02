@@ -3,7 +3,7 @@ import { db } from "../firebaseConfig";
 import { doc, onSnapshot } from "firebase/firestore";
 import type { JamSession } from "../types.ts";
 
-export default function useJamSession(sessionId: string | undefined) {
+export default function useJamSession(sessionId: string | undefined | null) {
   const [jamSession, setJamSession] = useState<JamSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
