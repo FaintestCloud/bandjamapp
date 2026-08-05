@@ -32,7 +32,7 @@ export default function JamSessions() {
               className="block p-3 border rounded hover:bg-gray-50"
             >
               <div className="font-medium text-gray-800 mb-1">
-                Session Date:{" "}
+                Date/Time:{" "}
                 {session.date.toLocaleString()}
               </div>
 

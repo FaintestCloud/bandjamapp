@@ -7,6 +7,7 @@ import { db } from "../firebaseConfig";
 import { updateSong } from "../services/songService"
 import SongInstrumentEditor from "../components/SongInstrumentEditor.tsx";
 import type { Song } from "../types";
+import useSong from "../hooks/useSong.ts";
 import { mockSongs } from "../mocks/songs.mock";
 
 const useMock = false;
@@ -20,44 +21,27 @@ const htmlTableFormatter = new HtmlTableFormatter;
 
 export default function SongDetail() {
   const { id } = useParams<{ id: string }>();
-  const [song, setSong] = useState<Song | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { song , loading, error} = useSong(id);
   const [showInstrumentEditor, setShowInstrumentEditor] = useState(false);
 
   const [originalKey, setOriginalKey] = useState<string>("-");
   const [currentKey, setCurrentKey] = useState<string>("-");
+
+  const [isEditingLink, setIsEditingLink] = useState(false);
+  const [referenceLink, setReferenceLink] = useState("")
   let songChordParsed = null;
   const instruments = song?.instruments ?? {};
 
-  useEffect(() => {
-    if (!id) return;
-    setLoading(true);
 
-    if (useMock) {
-      const mockSong = mockSongs.find((s) => s.id === id);
-      if (mockSong) {
-        setSong(mockSong);
-      } else {
-        setError("Song not found in mock data.");
-      }
-      setLoading(false);
-    } else {
-      getDoc(doc(db, "songs", id))
-        .then((snap) => {
-          if (snap.exists()) {
-            setSong({...(snap.data() as Song), id: snap.id });
-            setCurrentKey(snap.data().key ?? "-");
-            setOriginalKey(snap.data().originalKey ?? "-");
-            // setEditableInstruments({ ...snap.data().instruments });
-          } else {
-            setError("Song not found.");
-          }
-        })
-        .catch(() => setError("Failed to load song."))
-        .finally(() => setLoading(false));
-    }
-  }, [id]);
+  useEffect(() => {
+    if (!song) return;
+    console.log('useEffect');
+
+    setCurrentKey(song.key ?? "-");
+    setOriginalKey(song.originalKey ?? "-");
+    setReferenceLink(song.referenceLink ?? "");
+  }, [song]);
+  
 
   useEffect(() => {
     if(!song) return;
@@ -79,11 +63,11 @@ export default function SongDetail() {
     song.originalKey = originalKey;
   }, [originalKey]);
 
-  if (loading) return <div className="p-8 text-center">Loading...</div>;
-  if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
+  if (loading || !song) return <div className="p-8 text-center">Loading...</div>;
+  if (error) return <div className="p-8 text-center text-red-500">{error.message}</div>;
   if (!song) return null;
 
-  if (song.lyrics) {
+  if (song.lyrics && MUSICAL_KEYS.includes(originalKey) && originalKey != "-" && MUSICAL_KEYS.includes(currentKey) && currentKey != "-") {
     const rawParsed = chordProParser.parse(song.lyrics).setKey(originalKey).changeKey(currentKey);
     songChordParsed = htmlTableFormatter.format(rawParsed);
   } else {
@@ -131,12 +115,29 @@ export default function SongDetail() {
       </div>
 
       {/* Instruments & Players */}
-      {/* TODO:Think of better way to start editing instrument */}
       <div>
         <div className="flex items-center gap-3">
           <span className="songitem-label">Players</span>
         </div>
       </div>
+      <button
+        onClick={() => setShowInstrumentEditor(true)}
+        className="text-sm text-blue-500"
+      >
+        Edit Players
+      </button>
+      {
+        showInstrumentEditor && (
+          <SongInstrumentEditor
+            instruments={instruments}
+            songId={song.id}
+            onClose={() => setShowInstrumentEditor(false)}
+            onConfirm={() => {
+              setShowInstrumentEditor(false);
+            }}
+          />
+        )
+      }
       <ul className="songitem-players">
         {Object.entries(instruments).map(([instrument, player]) => (
           <li key={instrument}>
@@ -148,31 +149,72 @@ export default function SongDetail() {
           </li>
         ))}
       </ul> 
-      <button
-        onClick={() => setShowInstrumentEditor(true)}
-        className="text-sm text-blue-500"
-      >
-        Edit
-      </button>
-      {
-        showInstrumentEditor && (
-          <SongInstrumentEditor
-            instruments={instruments}
-            songId={song.id}
-            onClose={() => setShowInstrumentEditor(false)}
-            onConfirm={(updatedInstruments) => {
-              setSong(prev => prev ? {
-                  ...prev,
-                  instruments: updatedInstruments,
-              } : null);
-              setShowInstrumentEditor(false);
-            }}
-          />
-        )
-      }
 
       {/* Reference Link */}
-      {song.referenceLink && (
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <span className="shrink-0 font-medium">Reference:</span>
+
+          {!isEditingLink ? (
+            <>
+              {referenceLink ? (
+                <a
+                  href={referenceLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:underline hover:text-gray-900 max-w-full"
+                  title={referenceLink}
+                >
+                Link
+              </a>
+              ) : (
+                <span className="text-gray-400">No link</span>
+              )}
+
+              <button
+                onClick={() => setIsEditingLink(true)}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Edit
+              </button>
+
+            </>
+          ) : (
+            <>
+              <input
+                type="text"
+                value={referenceLink}
+                onChange={(e) => setReferenceLink(e.target.value)}
+                className="rounded border px-2 py-1"
+              />
+
+              <button
+                onClick={async () => {
+                  await updateSong(song.id, {
+                    referenceLink: referenceLink.trim(),
+                  });
+                  setIsEditingLink(false);
+                }}
+                className="rounded bg-blue-500 px-3 py-1 text-white"
+              >
+                Save
+              </button>
+
+              <button
+                onClick={() => {
+                  setReferenceLink(song.referenceLink ?? "");
+                  setIsEditingLink(false);
+                }}
+                className="rounded border px-3 py-1"
+              >
+                Cancel
+              </button>
+          </>
+          )}
+        </div>
+      </div>
+
+      {/* {song.referenceLink && (
         <p className="flex gap-1">
           <span className="shrink-0">Reference:</span>
           <a
@@ -185,7 +227,7 @@ export default function SongDetail() {
             Link
           </a>
         </p>
-      )}
+      )} */}
 
       {/* Song Lyrics and Chords */}
       {songChordParsed && (

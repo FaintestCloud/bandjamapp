@@ -6,7 +6,7 @@ interface Props {
   instruments: Record<string, string>;
   songId: string;
   onClose: () => void;
-  onConfirm: (data: Record<string, string>) => void;
+  onConfirm: () => void;
 }
 
 export default function SongInstrumentEditor({
@@ -37,7 +37,7 @@ export default function SongInstrumentEditor({
       instruments : ordered
     })
 
-    onConfirm(ordered);
+    onConfirm();
   }
 
   return (

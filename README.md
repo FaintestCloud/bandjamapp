@@ -93,7 +93,16 @@ Func
 - refine 'no upcoming jam session' on homepage
 - add deletion confirm
 - handle adblock scenario where login page couldn't be loaded
-- handle anonymous login ; add passcode
+- beautify anonymous login ; add passcode
+
+- Handle concurrent editing / real-time updates (current behaviour : pages automatically refreshes on db data changes)
+   - Investigate how onSnapshot updates should interact with in-progress edits.
+   - Prevent users from losing unsaved changes when another user updates the same song.
+   - Consider approaches such as:
+      - Pause applying live updates while editing.
+      - Detect document version/timestamp changes and prompt the user to reload or merge changes.
+      - Implement optimistic updates with conflict detection.
+      - Add document locking if simultaneous editing becomes a common use case.
 
 - Instruments
    - Beautify components and edit button

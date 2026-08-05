@@ -5,13 +5,18 @@ import type { Song } from "../types.ts";
 
 export default function useSong(songId: string | undefined) {
   const [song, setSong] = useState<Song | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     // Handle non-exist id
     if (!songId) {
       setSong(null);
+      setLoading(false);
       return;
     }
+
+    setLoading(true);
 
     const unsub = onSnapshot(
       doc(db, "songs", songId), 
@@ -25,10 +30,16 @@ export default function useSong(songId: string | undefined) {
         } else {
           setSong(null);
         }
+
+        setLoading(false);
+    },
+    (err) => {
+      setError(err)
+      setLoading(false);
     });
 
-    return unsub;
-  }, []);
+    return () => unsub();;
+  }, [songId]);
 
-  return { song };
+  return { song, loading, error};
 }
