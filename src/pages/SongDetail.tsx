@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { ChordProParser, HtmlTableFormatter } from 'chordsheetjs';
 
-import { db } from "../firebaseConfig";
 import { updateSong } from "../services/songService"
 import SongInstrumentEditor from "../components/SongInstrumentEditor.tsx";
 import type { Song } from "../types";
 import useSong from "../hooks/useSong.ts";
 import { mockSongs } from "../mocks/songs.mock";
+import { songDocParse } from "../songDoc/parser.ts"
 
 const useMock = false;
 const MUSICAL_KEYS = [
@@ -16,8 +14,7 @@ const MUSICAL_KEYS = [
   "F", "F#", "G", "G#", "A",
   "A#", "B", "-"
 ];
-const chordProParser = new ChordProParser;
-const htmlTableFormatter = new HtmlTableFormatter;
+
 
 export default function SongDetail() {
   const { id } = useParams<{ id: string }>();
@@ -35,7 +32,6 @@ export default function SongDetail() {
 
   useEffect(() => {
     if (!song) return;
-    console.log('useEffect');
 
     setCurrentKey(song.key ?? "-");
     setOriginalKey(song.originalKey ?? "-");
@@ -68,8 +64,7 @@ export default function SongDetail() {
   if (!song) return null;
 
   if (song.lyrics && MUSICAL_KEYS.includes(originalKey) && originalKey != "-" && MUSICAL_KEYS.includes(currentKey) && currentKey != "-") {
-    const rawParsed = chordProParser.parse(song.lyrics).setKey(originalKey).changeKey(currentKey);
-    songChordParsed = htmlTableFormatter.format(rawParsed);
+    songChordParsed = songDocParse(song.lyrics, originalKey, currentKey);
   } else {
     songChordParsed = null;
   }

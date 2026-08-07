@@ -106,3 +106,6 @@ Func
 
 - Instruments
    - Beautify components and edit button
+
+- Enhance UI with MUI or shadcn/ui
+- Create songDoc model : import -> parse -> songDoc -> serialize -> chordPro -> firebase
