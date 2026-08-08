@@ -1,15 +1,9 @@
-interface SongDoc {
-  metadata: {
-    OriKey?: string;
-    CurrKey?: string;
-  };
-
+export interface SongDoc {
   sections: Section[];
 }
 
 interface Section {
   id: string;
-  type: "verse" | "chorus" | "bridge" | "custom";
   name?: string;
   lines: Line[];
 }

@@ -6,7 +6,7 @@ import SongInstrumentEditor from "../components/SongInstrumentEditor.tsx";
 import type { Song } from "../types";
 import useSong from "../hooks/useSong.ts";
 import { mockSongs } from "../mocks/songs.mock";
-import { songDocParse } from "../songDoc/parser.ts"
+import { toSongDoc } from "../songDoc/index.ts"
 
 const useMock = false;
 const MUSICAL_KEYS = [
@@ -64,7 +64,7 @@ export default function SongDetail() {
   if (!song) return null;
 
   if (song.lyrics && MUSICAL_KEYS.includes(originalKey) && originalKey != "-" && MUSICAL_KEYS.includes(currentKey) && currentKey != "-") {
-    songChordParsed = songDocParse(song.lyrics, originalKey, currentKey);
+    songChordParsed = toSongDoc("chordPro",song.lyrics);
   } else {
     songChordParsed = null;
   }

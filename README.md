@@ -80,6 +80,78 @@ A simple jam session planner and song idea manager for musicians.
 
 This app uses Vite environment variables for Firebase configuration. Keep `.env.local` out of source control.
 
+## SongDoc Architecture
+
+`SongDoc` is the canonical internal representation of a song's lyrics and chords. It acts as an abstraction layer between the application and external song formats such as ChordPro, plain text, PDF, or image-based input.
+
+The main principle is that all external formats are converted into `SongDoc` before being used by the application, and `SongDoc` is converted back into the required format when saving or exporting.
+
+```text
+External Format
+      │
+      │  songDocFrom()
+      ▼
+   SongDoc
+      │
+      ├── Editor
+      │     └── SongDoc → SongDoc
+      │
+      ├── Renderer / UI
+      │
+      │  songDocTo()
+      ▼
+External Format
+```
+
+### Adapter
+
+Each adapter handles conversion between `SongDoc` and one external format.
+
+Each adapter exposes two public operations:
+```ts
+toSongDoc()
+fromSongDoc()
+```
+
+For example, the ChordPro adapter handles:
+
+```text
+ChordPro → SongDoc
+SongDoc  → ChordPro
+```
+
+### SongDoc Editor
+
+The editor contains operations that modify the `SongDoc` itself.
+
+
+### Public API
+
+`index.ts` provides the main API for interacting with the SongDoc system:
+
+```ts
+songDocFrom("chordPro", input)
+songDocTo("chordPro", songDoc)
+```
+
+This keeps the rest of the application independent of the specific adapter implementation.
+
+
+### Design Principle
+
+`SongDoc` is the central interchange format.
+
+```text
+PDF ───────┐
+Image ─────┤
+Text ──────┼──→ SongDoc ──→ ChordPro
+ChordPro ──┤       │
+Other ─────┘       ├──────→ UI
+                   │
+                   └──────→ Editor
+```
+
+This allows new import/export formats to be added without changing the core `SongDoc` model, editor logic, or UI.
 
 ## TODO next
 Func
@@ -108,4 +180,14 @@ Func
    - Beautify components and edit button
 
 - Enhance UI with MUI or shadcn/ui
+
+## SongDoc
 - Create songDoc model : import -> parse -> songDoc -> serialize -> chordPro -> firebase
+- seperate transpose from parsing
+- chord: "C#m7/G#" or 
+{
+    root: "C#",
+    quality: "m7",
+    bass: "G#"
+}
+- consider using chordsheet as songDoc
