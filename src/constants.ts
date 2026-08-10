@@ -10,7 +10,7 @@ export const INSTRUMENTS_LIST = [
 export const MUSICAL_KEYS = [
   "C", "C#", "D", "D#", "E",
   "F", "F#", "G", "G#", "A",
-  "A#", "B", "-"
+  "A#", "B"
 ] as const;
 export type MusicalKey = typeof MUSICAL_KEYS[number];
 export function isMusicalKey(value: string): value is MusicalKey {

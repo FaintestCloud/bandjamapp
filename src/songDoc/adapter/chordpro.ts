@@ -2,11 +2,9 @@ import { ChordProParser, ChordProFormatter, HtmlTableFormatter, ChordLyricsPair 
 import type {SongDoc} from "../types.ts"
 
 const chordProParser = new ChordProParser;
-const htmlTableFormatter = new HtmlTableFormatter;
 
 export function toSongDoc(input : string) {
-    const rawParsed = chordProParser.parse(input);
-    return htmlTableFormatter.format(rawParsed);
+    return chordProParser.parse(input);
     // let res = convertToSongDoc(rawParsed);
     // return res;
 }

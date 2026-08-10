@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 
 import { updateSong } from "../services/songService"
 import SongInstrumentEditor from "../components/SongInstrumentEditor.tsx";
-import type { Song } from "../types";
 import useSong from "../hooks/useSong.ts";
 import { mockSongs } from "../mocks/songs.mock";
-import { toSongDoc } from "../songDoc/index.ts"
+
+// songDoc related
+import { toSongDoc, rederSongDoc } from "../songDoc/index.ts"
+import { setKey } from "../songDoc/editor/keyEdit.ts"
 
 const useMock = false;
 const MUSICAL_KEYS = [
@@ -26,10 +28,11 @@ export default function SongDetail() {
 
   const [isEditingLink, setIsEditingLink] = useState(false);
   const [referenceLink, setReferenceLink] = useState("")
-  let songChordParsed = null;
   const instruments = song?.instruments ?? {};
+  let thisSongDoc = null;
+  let songDocDisplay = null
 
-
+  // Hook to edit reference link
   useEffect(() => {
     if (!song) return;
 
@@ -38,7 +41,7 @@ export default function SongDetail() {
     setReferenceLink(song.referenceLink ?? "");
   }, [song]);
   
-
+  // Hook to edit current key
   useEffect(() => {
     if(!song) return;
     if (!song.id) return;
@@ -49,6 +52,7 @@ export default function SongDetail() {
     song.key = currentKey;
   }, [currentKey]);
 
+  // Hook to edit original key
   useEffect(() => {
     if(!song) return;
     if (!song.id) return;
@@ -63,10 +67,14 @@ export default function SongDetail() {
   if (error) return <div className="p-8 text-center text-red-500">{error.message}</div>;
   if (!song) return null;
 
-  if (song.lyrics && MUSICAL_KEYS.includes(originalKey) && originalKey != "-" && MUSICAL_KEYS.includes(currentKey) && currentKey != "-") {
-    songChordParsed = toSongDoc("chordPro",song.lyrics);
+  // TODO : make a feature for songDOc here
+  // Parse songDoc to song/chord feature here
+  if (song.lyrics) {
+    thisSongDoc = toSongDoc("chordPro",song.lyrics);
+    thisSongDoc = setKey(thisSongDoc, originalKey, currentKey);
+    songDocDisplay = rederSongDoc(thisSongDoc);
   } else {
-    songChordParsed = null;
+    thisSongDoc = null;
   }
 
   return (
@@ -209,26 +217,16 @@ export default function SongDetail() {
         </div>
       </div>
 
-      {/* {song.referenceLink && (
-        <p className="flex gap-1">
-          <span className="shrink-0">Reference:</span>
-          <a
-            href={song.referenceLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-600 hover:underline hover:text-gray-900 max-w-full"
-            title={song.referenceLink}
-          >
-            Link
-          </a>
-        </p>
-      )} */}
-
       {/* Song Lyrics and Chords */}
-      {songChordParsed && (
+      <div>
+        <div className="flex items-center gap-3">
+          <span className="songitem-label">Lyrics + Chords</span>
+        </div>
+      </div>
+      {songDocDisplay && (
         <div
         className=""
-        dangerouslySetInnerHTML={{__html: songChordParsed }}
+        dangerouslySetInnerHTML={{__html: songDocDisplay }}
         />
       )}
 

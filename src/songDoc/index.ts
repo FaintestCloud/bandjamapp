@@ -1,4 +1,5 @@
 import type { SongDoc } from "./types.ts";
+import { Song, HtmlTableFormatter } from "chordsheetjs"
 import {
   toSongDoc as chordProToSongDoc,
   songDocTo as chordProSongDocTo,
@@ -29,4 +30,10 @@ export function songDocTo<F extends SongDocFormat>(
   input: SongDoc
 ) {
   return adapters[format].songDocTo(input);
+}
+
+// TODO: move this Renderer out after creating dedicated feature or component for songDoc
+const htmlTableFormatter = new HtmlTableFormatter;
+export function rederSongDoc(input : Song) {
+  return htmlTableFormatter.format(input);
 }
