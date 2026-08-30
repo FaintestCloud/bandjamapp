@@ -7,8 +7,9 @@ import useSong from "../hooks/useSong.ts";
 import { mockSongs } from "../mocks/songs.mock";
 
 // songDoc related
-import { toSongDoc, rederSongDoc } from "../songDoc/index.ts"
-import { setKey } from "../songDoc/editor/keyEdit.ts"
+import type { SongDoc } from "../songDoc/types.ts";
+import { toSongDoc, renderSongDoc } from "../songDoc/index.ts";
+import { setKey } from "../songDoc/editor/keyEdit.ts";
 
 const useMock = false;
 const MUSICAL_KEYS = [
@@ -29,8 +30,8 @@ export default function SongDetail() {
   const [isEditingLink, setIsEditingLink] = useState(false);
   const [referenceLink, setReferenceLink] = useState("")
   const instruments = song?.instruments ?? {};
-  let thisSongDoc = null;
-  let songDocDisplay = null
+  let thisSongDoc: SongDoc | null = null;
+  let songDocDisplay: string | null = null;
 
   // Hook to edit reference link
   useEffect(() => {
@@ -70,9 +71,9 @@ export default function SongDetail() {
   // TODO : make a feature for songDOc here
   // Parse songDoc to song/chord feature here
   if (song.lyrics) {
-    thisSongDoc = toSongDoc("chordPro",song.lyrics);
+    thisSongDoc = toSongDoc("chordPro", song.lyrics);
     thisSongDoc = setKey(thisSongDoc, originalKey, currentKey);
-    songDocDisplay = rederSongDoc(thisSongDoc);
+    songDocDisplay = renderSongDoc(thisSongDoc);
   } else {
     thisSongDoc = null;
   }
